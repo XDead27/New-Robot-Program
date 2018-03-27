@@ -6,14 +6,17 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+
+
+
+
+
+
+
+
 
 /**
  * Created by Purplecoder 27/01/2018.
@@ -21,7 +24,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 public abstract class AutonomousMode extends LinearOpMode {
     // Motors
-    protected DcMotor cubesMotor = null;
+    protected DcMotor relicMotor = null;
     protected DcMotor leftMotorF = null;
     protected DcMotor leftMotorB = null;
     protected DcMotor rightMotorF = null;
@@ -30,9 +33,11 @@ public abstract class AutonomousMode extends LinearOpMode {
     // Servos
     protected Servo servoArm = null;
     protected Servo servoColor = null;
-    protected Servo servoCubesLeft = null;
-    protected Servo servoCubesRight = null;
-
+    protected Servo servoCubesLeftUp = null;
+    protected Servo servoCubesLeftDown = null;
+    protected Servo servoCubesRightUp = null;
+    protected Servo servoCubesRightDown = null;
+    protected Servo servoRelic = null;
     // Sensors
     protected ModernRoboticsI2cGyro gyroSensor = null;
     protected ColorSensor colorSensor = null;
@@ -57,6 +62,58 @@ public abstract class AutonomousMode extends LinearOpMode {
     OpenGLMatrix lastLocation = null;
     VuforiaLocalizer vuforia;
 
+//actioneaza servoCubesRightDown si servoCubesLeftDown,actioneaza servoArm,citeste culoarea,actioneaza servoColor,foloseste OpenGLMatrix
+//afla pozitia cubului,actioneaza motoarele,actioneaza leftMotorF/B sau rightMotorF/B(pentru a se alinia cu cryptobox)
+//actioneaza toate motoarele mai putin cubesMotor,folosinf gyroSensor face o rotatie de 180^,actioneaza toate motoarele mai putin relicMotor
+//actioneaza servoCubes..,actioneaza toate motoarele mai putin relicMotor cu -
+
+ public void runOpMode() {
+
+     rightMotorB.setDirection(DcMotor.Direction.FORWARD);
+     rightMotorF.setDirection(DcMotor.Direction.FORWARD);
+     leftMotorF.setDirection(DcMotor.Direction.REVERSE);
+     leftMotorB.setDirection(DcMotor.Direction.REVERSE);
+
+     waitForStart();
+     runtime.reset();
+
+    while(opModeIsActive()){
 
 
+    }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ }
+ }
