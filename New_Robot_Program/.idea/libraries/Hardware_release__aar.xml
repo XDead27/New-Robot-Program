@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Hardware-release:@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/16ce12e94b58e1ae2140cddf753a84218fc00b4c/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/16ce12e94b58e1ae2140cddf753a84218fc00b4c/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/libs/Hardware-release-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
