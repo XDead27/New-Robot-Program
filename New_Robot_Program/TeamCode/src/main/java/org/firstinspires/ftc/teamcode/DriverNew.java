@@ -91,93 +91,14 @@ public class DriverNew extends LinearOpMode {
 
         waitForStart();
 
+
+
         while (opModeIsActive()) {
-            // Driving Mechanism
-            leftWheelsPower = gamepad1.left_stick_y;
-            rightWheelsPower = gamepad1.right_stick_y;
-
-            // Check the deadzone
-            if (Math.abs(leftWheelsPower) < deadzone) leftWheelsPower = 0;
-            if (Math.abs(rightWheelsPower) < deadzone) rightWheelsPower = 0;
-
-            if (leftWheelsPower > 0.9) leftWheelsPower = 0.9;
-            if (leftWheelsPower < -0.9) leftWheelsPower = -0.9;
-            if (rightWheelsPower > 0.9) rightWheelsPower = 0.9;
-            if (rightWheelsPower < -0.9) rightWheelsPower = -0.9;
-
-            leftMotorF.setPower(leftWheelsPower);
-            leftMotorB.setPower(leftWheelsPower);
-            rightMotorB.setPower(rightWheelsPower);
-            rightMotorF.setPower(rightWheelsPower);
-
-            // Servo Cubes Mechanism
-            /*if(gamepad1.left_trigger != 0) {
-                servoCubesLeft.setPosition(CUBES_MAX);
-                switchServoCubesLeft = true;
-            } else if(switchServoCubesLeft) {
-                servoCubesLeft.setPosition(CUBES_MIN);
-                switchServoCubesLeft = false;
-            }
-
-            if(gamepad1.right_trigger != 0) {
-                servoCubesRight.setPosition(CUBES_MAX);
-                switchServoCubesRight = true;
-            } else if(switchServoCubesRight) {
-                servoCubesRight.setPosition(CUBES_MIN);
-                switchServoCubesRight = false;
-            }*/
-
-            if (gamepad1.a && !switchServoCubes) {
-                servoCubesRight.setPosition(CUBES_MAX);
-                servoCubesLeft.setPosition(CUBES_MAX);
-                switchServoCubes = true;
-            }
-            if (gamepad1.b && switchServoCubes) {
-                servoCubesRight.setPosition(CUBES_MIN);
-                servoCubesLeft.setPosition(CUBES_MIN);
-                switchServoCubes = false;
-            }
-            // Cubes mechanism
-            if (gamepad1.dpad_up) {
-                cubesMotor.setPower(cubesPower);
-            } else if (gamepad1.dpad_down) {
-                cubesMotor.setPower(-cubesPower);
-            } else {
-                cubesMotor.setPower(0);  // Stop the motor
-            }
-            // Servo Arm Mechanism
-            if  (gamepad2.a) {
-                servoArm.setPosition(ARM_DOWN);  // Servo Arm DOWN position
-            } else{
-                servoArm.setPosition(ARM_UP);  // Servo Arm UP position
-            }
-            // Servo Color Mechanism
-            if (gamepad2.x) //(Blue){
-                servoColor.setPosition(COLOR_RIGHT);  // Servo Color RIGHT position
-            else if (gamepad2.y) //(Red){
-                servoColor.setPosition(COLOR_LEFT);  // Servo Color LEFT position
-            else{ servoColor.setPosition(MID_SERVO);}
-
-            // Telemetry Data
-            telemetry.addData("leftWheelsPower", leftWheelsPower);
-            telemetry.addData("rightWheelsPower", rightWheelsPower);
-            telemetry.addData("" + ">", "Press Stop to end test.");
-            telemetry.update();
-            idle();
-
 
         }
-        stopMotors();  // Stop all the motors
     }
 
-    // This function stops all the motors of the robot
-    public void stopMotors() {
-        leftMotorF.setPower(0);
-        leftMotorB.setPower(0);
-        rightMotorF.setPower(0);
-        rightMotorB.setPower(0);
-    }
-    //StopMotors
+
 
 }
 
