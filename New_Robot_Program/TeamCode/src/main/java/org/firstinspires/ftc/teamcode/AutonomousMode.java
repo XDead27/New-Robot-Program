@@ -9,15 +9,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-
-
-
-
-
-
-
-
-
 /**
  * Created by Purplecoder 27/01/2018.
  */
@@ -74,14 +65,40 @@ public abstract class AutonomousMode extends LinearOpMode {
      leftMotorF.setDirection(DcMotor.Direction.REVERSE);
      leftMotorB.setDirection(DcMotor.Direction.REVERSE);
 
-     waitForStart();
-     runtime.reset();
+     while(opModeIsActive()){
+        waitForStart();
 
-    while(opModeIsActive()){
+            MoveForward(5);
+            TurnLeft(3);
+            TurnRight(3);
+            }
 
-
+     }
+    public void MoveForward(double power){
+        leftMotorF.setPower(power);
+        leftMotorB.setPower(power);
+        rightMotorB.setPower(power);
+        rightMotorF.setPower(power);
     }
+
+    public void TurnRight(double power){
+        leftMotorF.setPower(power);
+        leftMotorB.setPower(power);
+        rightMotorB.setPower(-power);
+        rightMotorF.setPower(-power);
+        gyroSensor.getHeading();
+        gyroSensor.rawX();
     }
+    public void TurnLeft(double power){
+        leftMotorF.setPower(-power);
+        leftMotorB.setPower(-power);
+        rightMotorB.setPower(power);
+        rightMotorF.setPower(power);
+        gyroSensor.getHeading();
+        gyroSensor.rawX();
+    }
+
+
 }
 
 
