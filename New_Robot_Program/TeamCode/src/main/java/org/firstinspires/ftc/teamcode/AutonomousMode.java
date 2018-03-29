@@ -4,6 +4,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -166,13 +167,31 @@ public abstract class AutonomousMode extends LinearOpMode {
         Stop_Wheels();
     }
 
-    protected void Rotate_Wheels_Gyro(double power, double direction, double gyrotarget){
-        Range.clip(gyrotarget, -180, 180);
+    protected void Rotate_Wheels_Gyro_PID(double power, double direction, double gyrotarget){
+        Range.clip(gyrotarget, 0, 355);
         Range.clip(direction, -1,1);
         Range.clip(power, 0, 0.9);
-        int initHeading = gyroSensor.getHeading();
+        //int initHeading = gyroSensor.getHeading();
+        double pGain = 0.1;
+        double iGain = 0.05;
+        //double dGain = 1;
+        //double initPower = power;
+        double error = 1;
+        double errorSum = 0;
 
-        Power_Wheels(direction*power, direction*(-power) );
+
+        while(Math.abs(error) > 0.5){
+            int currentHeading = gyroSensor.getHeading();
+            error = gyrotarget - currentHeading;
+            errorSum += error;
+
+            power = error*pGain + errorSum*iGain;
+            Range.clip(power, 0, 0.9);
+
+            Power_Wheels(power, -power);
+        }
+
+        Stop_Wheels();
 
     }
 
