@@ -149,14 +149,15 @@ public abstract class AutonomousMode extends LinearOpMode {
 
         Range.clip(power, 0, 0.9);
 
-        leftMotorF.setTargetPosition(target);
-        leftMotorB.setTargetPosition(target);
-        rightMotorF.setTargetPosition(target);
-        rightMotorB.setTargetPosition(target);
         leftMotorF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftMotorB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightMotorF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightMotorB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftMotorF.setTargetPosition(target);
+        leftMotorB.setTargetPosition(target);
+        rightMotorF.setTargetPosition(target);
+        rightMotorB.setTargetPosition(target);
 
         Power_Wheels(power, power);
 
