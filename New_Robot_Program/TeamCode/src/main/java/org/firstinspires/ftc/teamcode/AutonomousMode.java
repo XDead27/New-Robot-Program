@@ -174,21 +174,25 @@ public abstract class AutonomousMode extends LinearOpMode {
         //int initHeading = gyroSensor.getHeading();
         double pGain = 0.1;
         double iGain = 0.05;
-        //double dGain = 1;
+        double dGain = 0.3;
         //double initPower = power;
-        double error = 1;
+        double error = gyrotarget - gyroSensor.getHeading();
         double errorSum = 0;
+        double derivative;
+        double d_aux = error;
 
 
         while(Math.abs(error) > 0.5){
-            int currentHeading = gyroSensor.getHeading();
-            error = gyrotarget - currentHeading;
+            error = gyrotarget - gyroSensor.getHeading();
             errorSum += error;
+            derivative = error - d_aux;
+            d_aux = error;
 
-            power = error*pGain + errorSum*iGain;
+            power = error*pGain + errorSum*iGain + derivative*dGain;
             Range.clip(power, 0, 0.9);
 
             Power_Wheels(power, -power);
+            sleep(5);
         }
 
         Stop_Wheels();
