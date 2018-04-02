@@ -16,10 +16,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-/**
- * Created by Purplecoder 27/01/2018.
- */
-
 /*****************************
  * MAIN BRANCH
  *****************************/
@@ -181,6 +177,8 @@ public abstract class AutonomousMode extends LinearOpMode {
         double errorSum = 0;
         double derivative;
         double d_aux = error;
+
+        //TODO change gyro sensor to cardinal numbering
 
 
         while(Math.abs(error) > 0.5){
