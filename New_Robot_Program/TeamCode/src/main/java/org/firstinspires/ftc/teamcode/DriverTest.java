@@ -9,21 +9,28 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Created by Alin on 12/23/2017.
  */
 
-@TeleOp(name = "DriverPrototype", group = "TeleOp")
+@TeleOp(name = "DriverTest", group = "TeleOp")
 //@Disabled
-public class DriverNew extends LinearOpMode {
+public class DriverTest extends LinearOpMode {
 
-    // Motors
-    private DcMotor cubesMotor = null;
-    private DcMotor leftMotorF = null;
-    private DcMotor leftMotorB = null;
-    private DcMotor rightMotorF = null;
-    private DcMotor rightMotorB = null;
-    //Servos
-    private Servo servoArm = null;
-    private Servo servoColor = null;
-    private Servo servoCubesLeft = null;
-    private Servo servoCubesRight = null;
+    protected DcMotor relicLMotor = null;
+    protected DcMotor relicRMotor = null;
+    protected DcMotor cubesMotor = null;
+    protected DcMotor leftMotorF = null;
+    protected DcMotor leftMotorB = null;
+    protected DcMotor rightMotorF = null;
+    protected DcMotor rightMotorB = null;
+
+    // Servos
+    protected Servo servoClaw = null;
+    protected Servo servoExtension  = null;
+    protected Servo servoArm = null;
+    protected Servo servoColor = null;
+    protected Servo servoCubesDownLeft = null;
+    protected Servo servoCubesDownRight = null;
+    protected Servo servoCubesUpRight = null;
+    protected Servo servoCubesUpLeft = null;
+
     //Constants
     private static final double ARM_UP = 0.96;
     private static final double ARM_DOWN = 0.12;
@@ -53,8 +60,10 @@ public class DriverNew extends LinearOpMode {
         // Map the servos
         servoArm = hardwareMap.servo.get("arm");
         servoColor = hardwareMap.servo.get("color");
-        servoCubesLeft = hardwareMap.servo.get("cubes_left");
-        servoCubesRight = hardwareMap.servo.get("cubes_right");
+        servoCubesUpLeft = hardwareMap.servo.get("cubes_up_left");
+        servoCubesUpRight = hardwareMap.servo.get("cubes_up_right");
+        servoCubesDownLeft = hardwareMap.servo.get("cubes_down_left");
+        servoCubesDownRight = hardwareMap.servo.get("cubes_down_right");
         // Set wheel motor directions
         leftMotorF.setDirection(DcMotor.Direction.REVERSE);
         leftMotorB.setDirection(DcMotor.Direction.REVERSE);
@@ -70,8 +79,10 @@ public class DriverNew extends LinearOpMode {
         // Set servo directions
         servoArm.setDirection(Servo.Direction.FORWARD);
         servoColor.setDirection(Servo.Direction.FORWARD);
-        servoCubesLeft.setDirection(Servo.Direction.FORWARD);
-        servoCubesRight.setDirection(Servo.Direction.REVERSE);
+        servoCubesUpLeft.setDirection(Servo.Direction.FORWARD);
+        servoCubesUpRight.setDirection(Servo.Direction.REVERSE);
+        servoCubesDownLeft.setDirection(Servo.Direction.FORWARD);
+        servoCubesDownRight.setDirection(Servo.Direction.REVERSE);
         // Set the motors power to 0
         cubesMotor.setPower(0);
         leftMotorF.setPower(0);
@@ -81,8 +92,10 @@ public class DriverNew extends LinearOpMode {
         // Initialize servo positions
         servoArm.setPosition(ARM_UP);
         servoColor.setPosition(MID_SERVO);
-        servoCubesRight.setPosition(CUBES_MIN);
-        servoCubesLeft.setPosition(CUBES_MIN);
+        servoCubesUpRight.setPosition(CUBES_MIN);
+        servoCubesUpLeft.setPosition(CUBES_MIN);
+        servoCubesDownRight.setPosition(CUBES_MIN);
+        servoCubesDownLeft.setPosition(CUBES_MIN);
 
         telemetry.addData("Say", "Hello Driver!");
         telemetry.addData("Status", "Initialized");
@@ -94,11 +107,32 @@ public class DriverNew extends LinearOpMode {
 
 
         while (opModeIsActive()) {
+            if(Math.abs(gamepad1.left_stick_x) > deadzone){
+                Power_Left_Wheels(gamepad1.left_stick_x);
+            }else{
+                Power_Left_Wheels(0);
+            }
+
+
+            if(Math.abs(gamepad1.right_stick_x) > deadzone){
+                Power_Left_Wheels(gamepad1.right_stick_x);
+            }else{
+                Power_Right_Wheels(0);
+            }
 
         }
+
     }
 
+    private void Power_Left_Wheels(double LMotorsPower){
+        leftMotorB.setPower(LMotorsPower);
+        leftMotorF.setPower(LMotorsPower);
+    }
 
+    private void Power_Right_Wheels(double RMotorsPower){
+        rightMotorB.setPower(RMotorsPower);
+        rightMotorF.setPower(RMotorsPower);
+    }
 
 }
 

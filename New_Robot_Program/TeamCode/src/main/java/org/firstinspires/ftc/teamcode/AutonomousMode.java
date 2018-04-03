@@ -4,12 +4,10 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
@@ -58,6 +56,7 @@ public abstract class AutonomousMode extends LinearOpMode {
     protected static final double CUBES_MAX = 0.8;
     protected static final double LIFT_MAX = 5000;
     protected static final double COUNTS_PER_CM = 67;
+    protected static final double MAX_P_SPEED = 1/360;
 
     protected ElapsedTime runtime = new ElapsedTime();
 
@@ -205,9 +204,9 @@ public abstract class AutonomousMode extends LinearOpMode {
         Range.clip(direction, -1,1);
         Range.clip(power, 0, 0.9);
         //int initHeading = gyroSensor.getHeading();
-        double pGain = 0.1;
-        double iGain = 0.05;
-        double dGain = 0.3;
+        double pGain = MAX_P_SPEED;
+        double iGain = 0.0005;
+        double dGain = 0.003;
         //double initPower = power;
         double error = gyrotarget - gyroSensor.getHeading();
         double errorSum = 0;
