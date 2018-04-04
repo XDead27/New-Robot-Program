@@ -134,62 +134,32 @@ public class DriverTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            /*if(gamepad1.left_stick_x != 0 && gamepad1.right_bumper){
-                if(cubesMotor.getCurrentPosition() < LIFT_MAX && cubesMotor.getCurrentPosition() > 0) {
-                    cubesMotor.setPower(gamepad1.left_stick_x);
-                }else{
-                    cubesMotor.setPower(0);
-                }
-            }*/
-
             if(Math.abs(gamepad1.left_stick_x) > deadzone){
-                if(currLeftWheelsPower < gamepad1.left_stick_x){
-                    currLeftWheelsPower += WheelsIncrementing;
-                }
-                if(currLeftWheelsPower > gamepad1.left_stick_x){
-                    currLeftWheelsPower -= WheelsIncrementing;
-                }
-
-                Power_Left_Wheels(currLeftWheelsPower);
-            }else if(Math.abs(currLeftWheelsPower) >= 0){
-                if(currLeftWheelsPower < 0){
-                    currLeftWheelsPower += WheelsIncrementing;
-                }
-                if(currLeftWheelsPower > 0){
-                    currLeftWheelsPower -= WheelsIncrementing;
-                }
-                Power_Left_Wheels(currLeftWheelsPower);
+                if(gamepad1.right_bumper)
+                    cubesMotor.setPower((cubesMotor.getCurrentPosition() < LIFT_MAX && cubesMotor.getCurrentPosition() > 0)? gamepad1.left_stick_x :0);
+                else if(cubesMotor.getPower() != 0)
+                    cubesMotor.setPower(0);
+                else
+                    Power_Left_Wheels(gamepad1.left_stick_x);
+            }else if(leftMotorF.getPower() != 0 || leftMotorB.getPower() != 0){
+                Power_Left_Wheels(0);
             }
-
 
             if(Math.abs(gamepad1.right_stick_x) > deadzone){
-                if(currRightWheelsPower < gamepad1.right_stick_x){
-                    currRightWheelsPower += WheelsIncrementing;
-                }
-                if(currRightWheelsPower > gamepad1.right_stick_x){
-                    currRightWheelsPower -= WheelsIncrementing;
-                }
-
-                Power_Right_Wheels(currRightWheelsPower);
-            }else if(Math.abs(currRightWheelsPower) >= 0){
-                if(currRightWheelsPower < 0){
-                    currRightWheelsPower += WheelsIncrementing;
-                }
-                if(currRightWheelsPower > 0){
-                    currRightWheelsPower -= WheelsIncrementing;
-                }
-                Power_Right_Wheels(currRightWheelsPower);
+                Power_Right_Wheels(gamepad1.right_stick_x);
+            }else if(rightMotorF.getPower() != 0 || rightMotorB.getPower() != 0){
+                Power_Right_Wheels(0);
             }
 
-            if(gamepad1.a){
-                servoCubesUpLeft.setPosition(CUBES_MAX);
-                servoCubesUpRight.setPosition(CUBES_MAX);
-            }
-            if(gamepad1.b){
-                servoCubesUpLeft.setPosition(CUBES_MIN);
-                servoCubesUpRight.setPosition(CUBES_MIN);
+            if(gamepad1.a ?true :gamepad1.b){
+                servoCubesUpLeft.setPosition(gamepad1.a ?CUBES_MAX :CUBES_MIN);
+                servoCubesUpRight.setPosition(gamepad1.a ?CUBES_MAX :CUBES_MIN);
             }
 
+
+            telemetry.addData("Pressing", (gamepad1.a)? "A " :"", gamepad1.b? "B " :"");
+            telemetry.addData("Sticks", "%f left_x : %f left_y : %f right_x : %f right_y", gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);
+            telemetry.update();
         }
     }
 
