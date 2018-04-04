@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 /**
  * Created by Alin on 12/23/2017.
@@ -42,6 +43,8 @@ public class DriverTest extends LinearOpMode {
     // Additional helper variables
     private double leftWheelsPower = 0, rightWheelsPower = 0;
     private double deadzone = 0.1;
+    double currLeftWheelsPower = 0;
+    double currRightWheelsPower = 0;
 
     private double cubesPower = 1;
 
@@ -107,29 +110,57 @@ public class DriverTest extends LinearOpMode {
 
 
         while (opModeIsActive()) {
+
             if(Math.abs(gamepad1.left_stick_x) > deadzone){
-                Power_Left_Wheels(gamepad1.left_stick_x);
-            }else{
-                Power_Left_Wheels(0);
+                if(currLeftWheelsPower < gamepad1.left_stick_x){
+                    currLeftWheelsPower += 0.1;
+                }
+                if(currLeftWheelsPower > gamepad1.left_stick_x){
+                    currLeftWheelsPower -= 0.1;
+                }
+
+                Power_Left_Wheels(currLeftWheelsPower);
+            }else if(Math.abs(currLeftWheelsPower) >= 0){
+                if(currLeftWheelsPower < 0){
+                    currLeftWheelsPower += 0.1;
+                }
+                if(currLeftWheelsPower > 0){
+                    currLeftWheelsPower -= 0.1;
+                }
+                Power_Left_Wheels(currLeftWheelsPower);
             }
 
 
             if(Math.abs(gamepad1.right_stick_x) > deadzone){
-                Power_Left_Wheels(gamepad1.right_stick_x);
-            }else{
-                Power_Right_Wheels(0);
+                if(currRightWheelsPower < gamepad1.right_stick_x){
+                    currRightWheelsPower += 0.1;
+                }
+                if(currRightWheelsPower > gamepad1.right_stick_x){
+                    currRightWheelsPower -= 0.1;
+                }
+
+                Power_Right_Wheels(currRightWheelsPower);
+            }else if(Math.abs(currRightWheelsPower) >= 0){
+                if(currRightWheelsPower < 0){
+                    currRightWheelsPower += 0.1;
+                }
+                if(currRightWheelsPower > 0){
+                    currRightWheelsPower -= 0.1;
+                }
+                Power_Right_Wheels(currRightWheelsPower);
             }
 
         }
-
     }
 
     private void Power_Left_Wheels(double LMotorsPower){
+        Range.clip(LMotorsPower,0,0.9);
         leftMotorB.setPower(LMotorsPower);
         leftMotorF.setPower(LMotorsPower);
     }
 
     private void Power_Right_Wheels(double RMotorsPower){
+        Range.clip(RMotorsPower,0,0.9);
         rightMotorB.setPower(RMotorsPower);
         rightMotorF.setPower(RMotorsPower);
     }
