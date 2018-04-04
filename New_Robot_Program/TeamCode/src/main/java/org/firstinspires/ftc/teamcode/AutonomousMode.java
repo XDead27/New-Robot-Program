@@ -176,18 +176,18 @@ public abstract class AutonomousMode extends LinearOpMode {
         rightMotorB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftMotorF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //leftMotorB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftMotorB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightMotorF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //rightMotorB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotorB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         leftMotorF.setTargetPosition(target);
-       // leftMotorB.setTargetPosition(target);
+        leftMotorB.setTargetPosition(target);
         rightMotorF.setTargetPosition(target);
-        //rightMotorB.setTargetPosition(target);
+        rightMotorB.setTargetPosition(target);
 
         Power_Wheels(power, power);
 
-        while(opModeIsActive() && (leftMotorF.isBusy() || rightMotorF.isBusy())){
+        while(opModeIsActive() && (leftMotorF.isBusy() || leftMotorB.isBusy() || rightMotorF.isBusy() || rightMotorB.isBusy())){
             idle();
         }
 
@@ -206,7 +206,7 @@ public abstract class AutonomousMode extends LinearOpMode {
         //int initHeading = gyroSensor.getHeading();
         double pGain = 0.005;
         double iGain = 0.0005;
-        double dGain = 0.005;
+        double dGain = 0.05;
         //double initPower = power;
         double errorSum = 0;
         double derivative;
@@ -221,7 +221,7 @@ public abstract class AutonomousMode extends LinearOpMode {
         double error = gyrotarget - gyroSensor.getHeading();
         double d_aux = error;
 
-        while(opModeIsActive() && (Math.abs(error) > 0.5)){
+       do {
             error = gyrotarget - gyroSensor.getHeading();
             if(errorSum + error < 700) {
                 errorSum += error;
@@ -240,9 +240,8 @@ public abstract class AutonomousMode extends LinearOpMode {
             telemetry.addData("Derivative", "%.3f", derivative);
             telemetry.update();
 
-          //sleep(5);
-
-        }
+            sleep(5);
+        } while(opModeIsActive() && (Math.abs(error) > 0.5));
 
         Stop_Wheels();
 
