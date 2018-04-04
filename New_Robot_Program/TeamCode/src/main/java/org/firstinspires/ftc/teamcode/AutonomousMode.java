@@ -204,31 +204,44 @@ public abstract class AutonomousMode extends LinearOpMode {
         Range.clip(direction, -1,1);
         Range.clip(power, 0, 0.9);
         //int initHeading = gyroSensor.getHeading();
-        double pGain = MAX_P_SPEED;
+        double pGain = 0.005;
         double iGain = 0.0005;
-        double dGain = 0.003;
+        double dGain = 0.005;
         //double initPower = power;
-        double error = gyrotarget - gyroSensor.getHeading();
         double errorSum = 0;
         double derivative;
-        double d_aux = error;
 
         //TODO change gyro sensor to cardinal numbering
 
-        while(Math.abs(error) > 0.5){
+        gyroSensor.calibrate();
+        while(!isStopRequested() && gyroSensor.isCalibrating() && opModeIsActive()){
+            idle();
+        }
+
+        double error = gyrotarget - gyroSensor.getHeading();
+        double d_aux = error;
+
+        while(opModeIsActive() && (Math.abs(error) > 0.5)){
             error = gyrotarget - gyroSensor.getHeading();
-            errorSum += error;
+            if(errorSum + error < 700) {
+                errorSum += error;
+            }
             derivative = error - d_aux;
             d_aux = error;
 
             power = error*pGain + errorSum*iGain + derivative*dGain;
-            Range.clip(power, 0, 0.9);
+            Range.clip(power, 0, 0.8);
 
-            Power_Wheels(power, -power);
+            Power_Wheels(-power, power);
 
-            telemetry.addData("Degrees", "%3d", gyroSensor.getHeading());
+            telemetry.addData("Orientation", "%3d", gyroSensor.getHeading());
+            telemetry.addData("Error", "%.3f", error);
+            telemetry.addData("ErrorSum", "%.3f", errorSum);
+            telemetry.addData("Derivative", "%.3f", derivative);
             telemetry.update();
-            sleep(5);
+
+          //sleep(5);
+
         }
 
         Stop_Wheels();
