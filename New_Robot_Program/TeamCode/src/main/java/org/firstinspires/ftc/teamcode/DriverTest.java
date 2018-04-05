@@ -141,8 +141,9 @@ public class DriverTest extends LinearOpMode {
                     cubesMotor.setPower(0);
                 else
                     Power_Left_Wheels(gamepad1.left_stick_x);
-            }else if(leftMotorF.getPower() != 0 || leftMotorB.getPower() != 0){
+            }else if(leftMotorF.getPower() != 0 || leftMotorB.getPower() != 0 || cubesMotor.getPower() != 0){
                 Power_Left_Wheels(0);
+                cubesMotor.setPower(0);
             }
 
             if(Math.abs(gamepad1.right_stick_x) > deadzone){
@@ -151,7 +152,7 @@ public class DriverTest extends LinearOpMode {
                 Power_Right_Wheels(0);
             }
 
-            if(gamepad1.a ?true :gamepad1.b){
+            if(gamepad1.a || gamepad1.b){
                 servoCubesUpLeft.setPosition(gamepad1.a ?CUBES_MAX :CUBES_MIN);
                 servoCubesUpRight.setPosition(gamepad1.a ?CUBES_MAX :CUBES_MIN);
             }

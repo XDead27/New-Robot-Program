@@ -38,8 +38,6 @@ public abstract class AutonomousMode extends LinearOpMode {
     // Sensors
     protected ModernRoboticsI2cGyro gyroSensor = null;
     protected ColorSensor colorSensor = null;
-    //protected OpticalDistanceSensor odsSensor = null;
-    //protected ModernRoboticsI2cRangeSensor rangeSensor = null;
 
     // Constants
     protected static final double CLAW_UP = 0.0;
@@ -159,6 +157,18 @@ public abstract class AutonomousMode extends LinearOpMode {
     //**********
     //Methods
     //**********
+
+    protected void Release_Cubes(){
+        servoCubesDownLeft.setPosition(CUBES_MIN);
+        servoCubesDownRight.setPosition(CUBES_MIN);
+        servoCubesUpLeft.setPosition(CUBES_MIN);
+        servoCubesUpRight.setPosition(CUBES_MIN);
+    }
+
+    protected void Read_Push_Ball (){
+
+    }
+
     protected void Power_Wheels(double LMotorsPower, double RMotorsPower){
         leftMotorF.setPower(LMotorsPower);
         leftMotorB.setPower(LMotorsPower);
@@ -199,24 +209,19 @@ public abstract class AutonomousMode extends LinearOpMode {
         rightMotorB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    protected void Rotate_Wheels_Gyro_PID(double power, double direction, double gyrotarget){
+    protected void Rotate_Wheels_Gyro_PID(double gyrotarget){
         Range.clip(gyrotarget, 0, 355);
-        Range.clip(direction, -1,1);
-        Range.clip(power, 0, 0.9);
-        //int initHeading = gyroSensor.getHeading();
+        double power;
         double pGain = 0.005;
         double iGain = 0.0005;
-        double dGain = 0.05;
-        //double initPower = power;
+        double dGain = 30;
         double errorSum = 0;
         double derivative;
 
         //TODO change gyro sensor to cardinal numbering
+        gyroSensor.setHeadingMode(ModernRoboticsI2cGyro.HeadingMode.HEADING_CARDINAL);
 
-        gyroSensor.calibrate();
-        while(!isStopRequested() && gyroSensor.isCalibrating() && opModeIsActive()){
-            idle();
-        }
+        gyroSensor.resetZAxisIntegrator();
 
         double error = gyrotarget - gyroSensor.getHeading();
         double d_aux = error;

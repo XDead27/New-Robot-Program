@@ -24,7 +24,7 @@ public class Test extends AutonomousMode {
     protected void runOp() {
         Move_Wheels_With_Encoders(0.5, (int)(50*COUNTS_PER_CM));
 
-        Rotate_Wheels_Gyro_PID(0.9, 1, 90);
+        Rotate_Wheels_Gyro_PID(90);
     }
 
     @Override
