@@ -128,7 +128,7 @@ public abstract class AutonomousMode extends LinearOpMode {
         servoClaw.setPosition(CLAW_DOWN);
         servoExtension.setPosition(EXTENSION_UP);
         servoArm.setPosition(ARM_UP);
-        servoColor.setPosition(COLOR_BACK);
+        servoColor.setPosition(MID_SERVO);
         servoCubesDownLeft.setPosition(CUBES_MAX);
         servoCubesDownRight.setPosition(CUBES_MAX);
         servoCubesUpLeft.setPosition(CUBES_MAX);
@@ -165,8 +165,23 @@ public abstract class AutonomousMode extends LinearOpMode {
         servoCubesUpRight.setPosition(CUBES_MIN);
     }
 
-    protected void Read_Push_Ball (){
+    protected void Read_Push_Ball (boolean RedTeam){
 
+        servoArm.setPosition(ARM_DOWN);
+        sleep(1000);
+
+        if(colorSensor.red() > colorSensor.blue() && colorSensor.red() > colorSensor.green()){
+            servoColor.setPosition(RedTeam? COLOR_BACK :COLOR_FORWARD);
+
+        }else if(colorSensor.blue() > colorSensor.red() && colorSensor.blue() > colorSensor.green()){
+            servoColor.setPosition(RedTeam? COLOR_FORWARD :COLOR_BACK);
+
+        }
+
+        servoColor.setPosition(MID_SERVO);
+        servoArm.setPosition(ARM_UP);
+        sleep(1000);
+        servoColor.setPosition(COLOR_BACK);
     }
 
     protected void Power_Wheels(double LMotorsPower, double RMotorsPower){
