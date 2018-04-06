@@ -212,7 +212,12 @@ public abstract class AutonomousMode extends LinearOpMode {
 
         Power_Wheels(power, power);
 
-        while(opModeIsActive() && (leftMotorF.isBusy() || leftMotorB.isBusy() || rightMotorF.isBusy() || rightMotorB.isBusy())){
+        while(opModeIsActive() && (leftMotorF.isBusy() && leftMotorB.isBusy() && rightMotorF.isBusy() && rightMotorB.isBusy())){
+            telemetry.addData("Busy", leftMotorF.isBusy()? " LF %f" :"", (double)target - leftMotorF.getCurrentPosition());
+            telemetry.addData("Busy", leftMotorB.isBusy()? " LB %f" :"", (double)target - leftMotorB.getCurrentPosition());
+            telemetry.addData("Busy", rightMotorF.isBusy()? " RF %f" :"", (double)target - rightMotorF.getCurrentPosition());
+            telemetry.addData("Busy", rightMotorB.isBusy()? " RB %f" :"", (double)target - rightMotorB.getCurrentPosition());
+            telemetry.update();
             idle();
         }
 
@@ -229,20 +234,20 @@ public abstract class AutonomousMode extends LinearOpMode {
         double power;
         double pGain = 0.005;
         double iGain = 0.0005;
-        double dGain = 30;
+        double dGain = 0.04;
         double errorSum = 0;
         double derivative;
 
         //TODO change gyro sensor to cardinal numbering
-        gyroSensor.setHeadingMode(ModernRoboticsI2cGyro.HeadingMode.HEADING_CARDINAL);
+        gyroSensor.setHeadingMode(ModernRoboticsI2cGyro.HeadingMode.HEADING_CARTESIAN);
 
         gyroSensor.resetZAxisIntegrator();
 
-        double error = gyrotarget - gyroSensor.getHeading();
+        double error = gyrotarget - (double) gyroSensor.getHeading();
         double d_aux = error;
 
        do {
-            error = gyrotarget - gyroSensor.getHeading();
+            error = gyrotarget - (double)gyroSensor.getHeading();
             if(errorSum + error < 700) {
                 errorSum += error;
             }
@@ -255,9 +260,9 @@ public abstract class AutonomousMode extends LinearOpMode {
             Power_Wheels(-power, power);
 
             telemetry.addData("Orientation", "%3d", gyroSensor.getHeading());
-            telemetry.addData("Error", "%.3f", error);
-            telemetry.addData("ErrorSum", "%.3f", errorSum);
-            telemetry.addData("Derivative", "%.3f", derivative);
+            telemetry.addData("Error", "%f", error);
+            telemetry.addData("ErrorSum", "%f", errorSum);
+            telemetry.addData("Derivative", "%f", derivative);
             telemetry.update();
 
             sleep(5);

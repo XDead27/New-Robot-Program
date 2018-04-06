@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
@@ -45,8 +46,8 @@ public class DriverTest extends LinearOpMode {
     protected static final double MID_SERVO = 0.5;
     protected static final double CUBES_MIN = 0.65;
     protected static final double CUBES_MAX = 0.8;
-    protected static final double LIFT_MAX = 5000;
     protected static final double COUNTS_PER_CM = 67;
+    protected static final double LIFT_MAX = 36*COUNTS_PER_CM;
     protected static final double MAX_P_SPEED = 1/360;
     // Additional helper variables
     private double leftWheelsPower = 0, rightWheelsPower = 0;
@@ -81,10 +82,10 @@ public class DriverTest extends LinearOpMode {
         servoCubesUpLeft = hardwareMap.servo.get("cubes_up_left");
         servoCubesUpRight = hardwareMap.servo.get("cubes_up_right");
         // Set the wheel motors
-        leftMotorF.setDirection(DcMotor.Direction.FORWARD);
-        leftMotorB.setDirection(DcMotor.Direction.FORWARD);
-        rightMotorF.setDirection(DcMotor.Direction.REVERSE);
-        rightMotorB.setDirection(DcMotor.Direction.REVERSE);
+        leftMotorF.setDirection(DcMotor.Direction.REVERSE);
+        leftMotorB.setDirection(DcMotor.Direction.REVERSE);
+        rightMotorF.setDirection(DcMotor.Direction.FORWARD);
+        rightMotorB.setDirection(DcMotor.Direction.FORWARD);
 
         // Set the stopping method for wheels
         leftMotorF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -134,20 +135,21 @@ public class DriverTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            if(Math.abs(gamepad1.left_stick_x) > deadzone){
+            if(Math.abs(gamepad1.left_stick_y) > deadzone){
                 if(gamepad1.right_bumper)
-                    cubesMotor.setPower((cubesMotor.getCurrentPosition() < LIFT_MAX && cubesMotor.getCurrentPosition() > 0)? gamepad1.left_stick_x :0);
+                    cubesMotor.setPower((cubesMotor.getCurrentPosition() <= LIFT_MAX)? (cubesMotor.getCurrentPosition() >= 0)? gamepad1.left_stick_y :gamepad1.left_stick_y < 0?
+                                            0 :gamepad1.left_stick_y :gamepad1.left_stick_y > LIFT_MAX? 0 :gamepad1.left_stick_y);
                 else if(cubesMotor.getPower() != 0)
                     cubesMotor.setPower(0);
                 else
-                    Power_Left_Wheels(gamepad1.left_stick_x);
+                    Power_Left_Wheels(gamepad1.left_stick_y);
             }else if(leftMotorF.getPower() != 0 || leftMotorB.getPower() != 0 || cubesMotor.getPower() != 0){
                 Power_Left_Wheels(0);
                 cubesMotor.setPower(0);
             }
 
-            if(Math.abs(gamepad1.right_stick_x) > deadzone){
-                Power_Right_Wheels(gamepad1.right_stick_x);
+            if(Math.abs(gamepad1.right_stick_y) > deadzone){
+                Power_Right_Wheels(gamepad1.right_stick_y);
             }else if(rightMotorF.getPower() != 0 || rightMotorB.getPower() != 0){
                 Power_Right_Wheels(0);
             }
@@ -158,9 +160,9 @@ public class DriverTest extends LinearOpMode {
             }
 
 
-            telemetry.addData("Pressing", (gamepad1.a)? "A " :"", gamepad1.b? "B " :"");
-            telemetry.addData("Sticks", "%f left_x : %f left_y : %f right_x : %f right_y", gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);
-            telemetry.update();
+            //telemetry.addData("Pressing", (gamepad1.a)? "A " :"", gamepad1.b? "B " :"");
+            //telemetry.addData("Sticks", "%f left_x : %f left_y : %f right_x : %f right_y", gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);
+            //telemetry.update();
         }
     }
 
