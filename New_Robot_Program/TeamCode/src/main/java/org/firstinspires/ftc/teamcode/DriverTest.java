@@ -157,6 +157,8 @@ public class DriverTest extends LinearOpMode {
             if(gamepad1.a || gamepad1.b){
                 servoCubesUpLeft.setPosition(gamepad1.a ?CUBES_MAX :CUBES_MIN);
                 servoCubesUpRight.setPosition(gamepad1.a ?CUBES_MAX :CUBES_MIN);
+                servoCubesDownLeft.setPosition(gamepad1.a ?CUBES_MAX :CUBES_MIN);
+                servoCubesDownRight.setPosition(gamepad1.a ?CUBES_MAX :CUBES_MIN);
             }
 
 
