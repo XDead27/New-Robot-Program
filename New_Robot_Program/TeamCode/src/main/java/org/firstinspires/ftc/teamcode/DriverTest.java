@@ -55,6 +55,7 @@ public class DriverTest extends LinearOpMode {
     double currLeftWheelsPower = 0;
     double currRightWheelsPower = 0;
     double WheelsIncrementing = 0.1;
+    boolean RelicMode = false;
 
     private double cubesPower = 1;
 
@@ -136,22 +137,30 @@ public class DriverTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             if(Math.abs(gamepad1.left_stick_y) > deadzone){
-                if(gamepad1.right_bumper)
+                if(RelicMode)
+                    relicLMotor.setPower(relicLMotor.getCurrentPosition() > 0? gamepad1.left_stick_y: gamepad1.left_stick_y > 0? gamepad1.left_stick_y :0);
+                else if(gamepad1.right_bumper)
                     cubesMotor.setPower((cubesMotor.getCurrentPosition() <= LIFT_MAX)? (cubesMotor.getCurrentPosition() >= 0)? gamepad1.left_stick_y :gamepad1.left_stick_y < 0?
                                             0 :gamepad1.left_stick_y :gamepad1.left_stick_y > LIFT_MAX? 0 :gamepad1.left_stick_y);
                 else if(cubesMotor.getPower() != 0)
                     cubesMotor.setPower(0);
                 else
                     Power_Left_Wheels(gamepad1.left_stick_y);
-            }else if(leftMotorF.getPower() != 0 || leftMotorB.getPower() != 0 || cubesMotor.getPower() != 0){
+            }else if(leftMotorF.getPower() != 0 || leftMotorB.getPower() != 0 || cubesMotor.getPower() != 0 || relicLMotor.getPower() != 0){
                 Power_Left_Wheels(0);
                 cubesMotor.setPower(0);
+                relicLMotor.setPower(0);
             }
 
             if(Math.abs(gamepad1.right_stick_y) > deadzone){
-                Power_Right_Wheels(gamepad1.right_stick_y);
-            }else if(rightMotorF.getPower() != 0 || rightMotorB.getPower() != 0){
+                if(RelicMode)
+                    //TODO make the two relic motors spin at the same speed by using tick limitation on the right one
+                    relicRMotor.setPower(relicLMotor.getCurrentPosition() > 0? gamepad1.right_stick_y: gamepad1.right_stick_y > 0? gamepad1.right_stick_y :0);
+                else
+                    Power_Right_Wheels(gamepad1.right_stick_y);
+            }else if(rightMotorF.getPower() != 0 || rightMotorB.getPower() != 0 || relicRMotor.getPower() != 0){
                 Power_Right_Wheels(0);
+                relicRMotor.setPower(0);
             }
 
             if(gamepad1.a || gamepad1.b){
@@ -161,7 +170,13 @@ public class DriverTest extends LinearOpMode {
                 servoCubesDownRight.setPosition(gamepad1.a ?CUBES_MAX :CUBES_MIN);
             }
 
+            if(gamepad1.x){
+                RelicMode = true;
+            }
 
+            if(gamepad1.y){
+                RelicMode = false;
+            }
             //telemetry.addData("Pressing", (gamepad1.a)? "A " :"", gamepad1.b? "B " :"");
             //telemetry.addData("Sticks", "%f left_x : %f left_y : %f right_x : %f right_y", gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);
             //telemetry.update();

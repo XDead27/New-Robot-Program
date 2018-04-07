@@ -170,14 +170,17 @@ public abstract class AutonomousMode extends LinearOpMode {
         servoArm.setPosition(ARM_DOWN);
         sleep(1000);
 
-        if(colorSensor.red() > colorSensor.blue() && colorSensor.red() > colorSensor.green()){
-            servoColor.setPosition(RedTeam? COLOR_BACK :COLOR_FORWARD);
-
-        }else if(colorSensor.blue() > colorSensor.red() && colorSensor.blue() > colorSensor.green()){
-            servoColor.setPosition(RedTeam? COLOR_FORWARD :COLOR_BACK);
-
+        while(true) {
+            if (colorSensor.red() > colorSensor.blue() && colorSensor.red() > colorSensor.green()) {
+                servoColor.setPosition(RedTeam ? COLOR_BACK : COLOR_FORWARD);
+                break;
+            } else if (colorSensor.blue() > colorSensor.red() && colorSensor.blue() > colorSensor.green()) {
+                servoColor.setPosition(RedTeam ? COLOR_FORWARD : COLOR_BACK);
+                break;
+            }
         }
 
+        sleep(1000);
         servoColor.setPosition(MID_SERVO);
         servoArm.setPosition(ARM_UP);
         sleep(1000);

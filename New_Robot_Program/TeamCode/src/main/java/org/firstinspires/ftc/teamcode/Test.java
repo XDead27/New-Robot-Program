@@ -22,9 +22,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 public class Test extends AutonomousMode {
     @Override
     protected void runOp() {
-        Move_Wheels_With_Encoders(0.5, (int)(50*COUNTS_PER_CM));
+        Read_Push_Ball(true);
 
-        Rotate_Wheels_Gyro_PID(90);
+        //Move_Wheels_With_Encoders(0.5, (int)(50*COUNTS_PER_CM));
+
+        //Rotate_Wheels_Gyro_PID(90);
     }
 
     @Override
