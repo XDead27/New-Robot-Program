@@ -56,6 +56,8 @@ public class DriverTest extends LinearOpMode {
     double currRightWheelsPower = 0;
     double WheelsIncrementing = 0.1;
     boolean RelicMode = false;
+    double RelicLAux = 0;
+    double RelicRAux = 0;
 
     private double cubesPower = 1;
 
@@ -136,9 +138,18 @@ public class DriverTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+
+
             if(Math.abs(gamepad1.left_stick_y) > deadzone){
-                if(RelicMode)
-                    relicLMotor.setPower(relicLMotor.getCurrentPosition() > 0? gamepad1.left_stick_y: gamepad1.left_stick_y > 0? gamepad1.left_stick_y :0);
+                if(RelicMode) {
+                    if (Math.abs(relicLMotor.getCurrentPosition() - RelicLAux) <= Math.abs(relicRMotor.getCurrentPosition() - RelicRAux))
+                        relicLMotor.setPower(relicLMotor.getCurrentPosition() > 0 ? gamepad1.left_stick_y : gamepad1.left_stick_y > 0 ? gamepad1.left_stick_y : 0);
+                    else
+                        relicLMotor.setPower(0);
+
+                    RelicLAux = relicLMotor.getCurrentPosition();
+                    RelicRAux = relicRMotor.getCurrentPosition();
+                }
                 else if(gamepad1.right_bumper)
                     cubesMotor.setPower((cubesMotor.getCurrentPosition() <= LIFT_MAX)? (cubesMotor.getCurrentPosition() >= 0)? gamepad1.left_stick_y :gamepad1.left_stick_y < 0?
                                             0 :gamepad1.left_stick_y :gamepad1.left_stick_y > LIFT_MAX? 0 :gamepad1.left_stick_y);
@@ -154,7 +165,7 @@ public class DriverTest extends LinearOpMode {
 
             if(Math.abs(gamepad1.right_stick_y) > deadzone){
                 if(RelicMode)
-                    //TODO make the two relic motors spin at the same speed by using tick limitation on the right one
+                    //TODO make the two relic motors spin at the same speed by using tick limitation on the left one
                     relicRMotor.setPower(relicLMotor.getCurrentPosition() > 0? gamepad1.right_stick_y: gamepad1.right_stick_y > 0? gamepad1.right_stick_y :0);
                 else
                     Power_Right_Wheels(gamepad1.right_stick_y);
