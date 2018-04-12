@@ -47,7 +47,7 @@ public class DriverTest extends LinearOpMode {
     protected static final double CUBES_MIN = 0.65;
     protected static final double CUBES_MAX = 0.8;
     protected static final double COUNTS_PER_CM = 67;
-    protected static final double LIFT_MAX = 36*COUNTS_PER_CM;
+    protected static final double LIFT_MAX = 35*COUNTS_PER_CM;
     protected static final double MAX_P_SPEED = 1/360;
     // Additional helper variables
     private double leftWheelsPower = 0, rightWheelsPower = 0;
@@ -142,13 +142,23 @@ public class DriverTest extends LinearOpMode {
 
             if(Math.abs(gamepad1.left_stick_y) > deadzone){
                 if(RelicMode) {
-                    if (Math.abs(relicLMotor.getCurrentPosition() - RelicLAux) <= Math.abs(relicRMotor.getCurrentPosition() - RelicRAux))
-                        relicLMotor.setPower(relicLMotor.getCurrentPosition() > 0 ? gamepad1.left_stick_y : gamepad1.left_stick_y > 0 ? gamepad1.left_stick_y : 0);
-                    else
-                        relicLMotor.setPower(0);
+                    //Controlling Left Relic Motor not to go faster than the right one
+                    if(gamepad1.left_stick_y > 0){
+                        if(relicLMotor.getCurrentPosition() <= relicRMotor.getCurrentPosition()){
+                            relicLMotor.setPower(gamepad1.left_stick_y);
+                        }else{
+                            relicLMotor.setPower(0);
+                        }
+                    }else if(gamepad1.left_stick_y < 0){
+                        if(relicLMotor.getCurrentPosition() >= relicRMotor.getCurrentPosition()){
+                            relicLMotor.setPower(relicLMotor.getCurrentPosition() <= 0? 0 :gamepad1.left_stick_y);
+                        }else{
+                            relicLMotor.setPower(0);
+                        }
+                    }
 
-                    RelicLAux = relicLMotor.getCurrentPosition();
-                    RelicRAux = relicRMotor.getCurrentPosition();
+                    //RelicLAux = relicLMotor.getCurrentPosition();
+                    //RelicRAux = relicRMotor.getCurrentPosition();
                 }
                 else if(gamepad1.right_bumper)
                     cubesMotor.setPower((cubesMotor.getCurrentPosition() <= LIFT_MAX)? (cubesMotor.getCurrentPosition() >= 0)? gamepad1.left_stick_y :gamepad1.left_stick_y < 0?
@@ -165,7 +175,6 @@ public class DriverTest extends LinearOpMode {
 
             if(Math.abs(gamepad1.right_stick_y) > deadzone){
                 if(RelicMode)
-                    //TODO make the two relic motors spin at the same speed by using tick limitation on the left one
                     relicRMotor.setPower(relicLMotor.getCurrentPosition() > 0? gamepad1.right_stick_y: gamepad1.right_stick_y > 0? gamepad1.right_stick_y :0);
                 else
                     Power_Right_Wheels(gamepad1.right_stick_y);

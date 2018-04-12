@@ -46,14 +46,14 @@ public abstract class AutonomousMode extends LinearOpMode {
     protected static final double EXTENSION_MID = 0.5;
     protected static final double EXTENSION_DOWN = 1.0;
     protected static final double ARM_UP = 0.96;
-    protected static final double ARM_DOWN = 0.33;
+    protected static final double ARM_DOWN = 0.40;
     protected static final double COLOR_FORWARD = 0.0;
     protected static final double COLOR_BACK = 1.0;
     protected static final double MID_SERVO = 0.5;
     protected static final double CUBES_MIN = 0.65;
     protected static final double CUBES_MAX = 0.8;
-    protected static final double LIFT_MAX = 5000;
     protected static final double COUNTS_PER_CM = 67;
+    protected static final double LIFT_MAX = 36 * COUNTS_PER_CM;
     protected static final double MAX_P_SPEED = 1/360;
 
     protected ElapsedTime runtime = new ElapsedTime();
