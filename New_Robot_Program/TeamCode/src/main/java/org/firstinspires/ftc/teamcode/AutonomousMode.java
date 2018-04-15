@@ -279,4 +279,5 @@ public abstract class AutonomousMode extends LinearOpMode {
         Power_Wheels(0, 0);
     }
 
+    //Ready for vuforia
 }
