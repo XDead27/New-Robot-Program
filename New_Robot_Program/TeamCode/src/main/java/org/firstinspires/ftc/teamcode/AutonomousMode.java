@@ -8,8 +8,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /*****************************
  * MAIN BRANCH
@@ -277,6 +281,48 @@ public abstract class AutonomousMode extends LinearOpMode {
 
     protected void Stop_Wheels(){
         Power_Wheels(0, 0);
+    }
+    protected int use_vuforia(){
+
+        VuforiaLocalizer vuforia;
+
+        int rez=0;
+        int cameraViewId=hardwareMap.appContext.getResources().getIdentifier("cameraView","id",hardwareMap.appContext.getPackageName());
+
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraViewId);
+        parameters.vuforiaLicenseKey = "AZBO+tf/////AAABmecJjqCpR0QBvpu2TKkPHhM4rV9d95GQ2A2m2MOktbLfOPU2Wi23+2g4YRqQe35RU39cSVqZ/rORVUl8xd5qno+tgTgg5JC7W+lMraJ+XWs+Sn/WDjRDydKqulFBsEUcIwWM3ut6VeTNXqof7JJll9HzeIiuBBKQnRy9ePIy66cwcrbf1NSZg6M/OUA7OpZaM5U0hLzlGIXCGvXlFBqRBDF6PBXnfIGBTBR+Xxhz1pwIwUKdWx+YsGwjwihGkfKd3AKaKwxUaYrqV2KJN2XP1omdD2rg5PdD5+ozcto2zWuZ/V7UStQb0o0qORRHSiOT6aGQnsIWElwQKIX8WWIRFABWGp6NLDq+96z0o5oPUFW6";
+
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
+        vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+
+        VuforiaTrackables relicTrackables = vuforia.loadTrackablesFromAsset("RelicVUMARK");
+        VuforiaTrackable relicTemplate = relicTrackables.get(0);
+
+        relicTrackables.activate();
+
+        runtime.reset();
+
+        while(opModeIsActive() && runtime.seconds() < 1.5 && rez == 0){
+            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+
+            switch(vuMark){
+                case LEFT:
+                    rez=1;
+                    break;
+                case CENTER:
+                    rez=2;
+                    break;
+                case RIGHT:
+                    rez=3;
+                    break;
+            }
+
+         telemetry.addData("VuMark","visible:",rez);
+         telemetry.addData("Time:","seconds:",runtime.seconds());
+         telemetry.update();
+         idle();
+        }
+        return rez;
     }
 
     //Ready for vuforia
